@@ -1,0 +1,19 @@
+.container{
+    -fx-background-color: #121212;
+    -fx-alignment: CENTER; 
+    -fx-spacing: 10;
+}
+
+.title{
+    -fx-font-size: 32;
+    -fx-font-weight: bold;
+    -fx-fill: white;
+}
+
+.button{
+    -fx-background-color: #333333;
+    -fx-text-fill: white;
+    -fx-padding: 10;
+    -fx-min-width: 250;
+    
+}
