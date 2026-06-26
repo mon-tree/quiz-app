@@ -2,6 +2,7 @@
     -fx-background-color: #121212;
     -fx-alignment: CENTER; 
     -fx-spacing: 10;
+    -fx-padding: 10;
 }
 
 .title{

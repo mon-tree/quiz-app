@@ -2,13 +2,17 @@ package com.montree.quizapp_2451052268;
 
 import com.montree.utils.AlertSingleton;
 import com.montree.utils.themes.Themes;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
+import javafx.stage.Stage;
 
 public class PrimaryController implements Initializable{
 
@@ -20,7 +24,15 @@ public class PrimaryController implements Initializable{
     }
     
     public void manage(ActionEvent e){
-        AlertSingleton.getInstance().show("manage");
+        try {
+            Stage stage = new Stage();
+            stage.setTitle("Quản lý câu hỏi");
+            Scene scene = new Scene(new FXMLLoader(App.class.getResource("questions.fxml")).load());
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
     public void practice(ActionEvent e){
         AlertSingleton.getInstance().show("practice");
