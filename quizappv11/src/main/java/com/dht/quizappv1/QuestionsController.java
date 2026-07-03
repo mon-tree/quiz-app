@@ -5,11 +5,14 @@
 package com.dht.quizappv1;
 
 import com.dht.pojo.Category;
+import com.dht.pojo.Choice;
 import com.dht.pojo.Level;
 import com.dht.pojo.Question;
 import com.dht.services.CategoryServices;
 import com.dht.services.LevelServices;
 import com.dht.services.questions.QuestionServices;
+import com.dht.utils.Configs;
+import com.dht.utils.MyAlertSingleton;
 import com.dht.utils.MyConnectionSingleton;
 import java.net.URL;
 import java.sql.Connection;
@@ -17,6 +20,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
@@ -28,6 +32,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
@@ -43,6 +48,7 @@ public class QuestionsController implements Initializable {
     @FXML private TableView<Question> tvQuestions;
     @FXML private ComboBox<Level> cbLevels;
     @FXML private VBox vChoices;
+    @FXML private TextArea txtContent;
 
     /**
      * Initializes the controller class.
@@ -54,9 +60,9 @@ public class QuestionsController implements Initializable {
         LevelServices lvl = new LevelServices();
         this.loadColums();
         try {
-            this.cbCates.setItems(FXCollections.observableList(s.getCates()));
-            this.tvQuestions.setItems(FXCollections.observableList(s2.getQuestions()));
-            this.cbLevels.setItems(FXCollections.observableList(lvl.getLevels()));
+            this.cbCates.setItems(FXCollections.observableList(Configs.cateServices.getCates()));
+            this.tvQuestions.setItems(FXCollections.observableList(Configs.qServices.getQuestions()));
+            this.cbLevels.setItems(FXCollections.observableList(Configs.lvlServices.getLevels()));
         } catch (SQLException ex) {
 //           Logger.getLogger(QuestionsController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -82,5 +88,23 @@ public class QuestionsController implements Initializable {
         h.getChildren().addAll(r, t);
         
         this.vChoices.getChildren().add(h);
+    }
+    public void addQuestion(ActionEvent e){
+        Question q = new Question.Builder().setContent(this.txtContent.getText()).setLevel(this.cbLevels.getSelectionModel().getSelectedItem())
+                .setCategory(this.cbCates.getSelectionModel().getSelectedItem()).build();
+        List<Choice> choices = new ArrayList<>();
+        for(var hbox: vChoices.getChildren()){
+            HBox h = (HBox) hbox;
+            RadioButton r = (RadioButton) h.getChildren().get(0);
+            TextField t = (TextField) h.getChildren().get(1);
+            
+            choices.add(new Choice(t.getText(), r.isSelected()));
+        }
+        try {
+            Configs.uqServices.addQuestion(q, choices);
+            MyAlertSingleton.getInstance().showMsg("Them cau hoi thanh cong");
+        } catch (SQLException ex) {
+            MyAlertSingleton.getInstance().showMsg("Them cau hoi that bai" + ex.getMessage());
+        }
     }
 }

@@ -50,7 +50,15 @@ public class Question {
             return this;
         }
         
-        // ...
+        public Builder setLevel(Level l){
+            this.level = l;
+            return this;
+        }
+        
+        public Builder setCategory(Category c){
+            this.category = c;
+            return this;
+        }
         
         public Question build() {
             return new Question(this);
